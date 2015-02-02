@@ -59,4 +59,8 @@ public class ClaimList implements Serializable {
 		getListeners().remove(l);
 
 	}
+	
+	public int size() {
+		return claimList.size();
+		}
 }

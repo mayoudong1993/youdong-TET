@@ -29,6 +29,24 @@ public class ClaimListController {
 		return claimlist;
 	}
 
+	static public void sort() {
+		for (int i = 0; i < (claimlist.size() - 1); i++) {
+			for (int j = i; j < (claimlist.size() - 1 - i); j++) {
+				if (claimlist.getPosition(j).calculatedate() > claimlist
+						.getPosition(j+1).calculatedate()) {
+					Claim bigger = claimlist.getPosition(j);
+					claimlist.removeClaim(bigger);
+					claimlist.addClaim(bigger);
+				}else{
+					Claim bigger = claimlist.getPosition(j+1);
+					claimlist.removeClaim(bigger);
+					claimlist.addClaim(bigger);
+				}
+				
+			}
+		}
+	}
+
 	static public void saveClaimList() {
 		try {
 			ClaimListManager.getManager().saveClaimList(getClaimList());

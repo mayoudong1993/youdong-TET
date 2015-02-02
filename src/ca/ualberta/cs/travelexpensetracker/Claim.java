@@ -1,7 +1,7 @@
 package ca.ualberta.cs.travelexpensetracker;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,7 +14,7 @@ public class Claim implements Serializable{
 	protected Date startdate;
 	protected Date enddate;
 	protected String des;
-	
+	protected int state;
 	protected ArrayList<Item> itemList;
 	protected transient ArrayList<Listener> listenersss;
 	
@@ -80,16 +80,16 @@ public class Claim implements Serializable{
 		return startdate;
 	}
 
-	public void setStartdate(Date startdate) {
-		this.startdate = startdate;
+	public void setStartdate(Date sd) {
+		this.startdate = sd;
 	}
 
 	public Date getEnddate() {
 		return enddate;
 	}
 
-	public void setEnddate(Date enddate) {
-		this.enddate = enddate;
+	public void setEnddate(Date ed) {
+		this.enddate = ed;
 	}
 
 	public String getDes() {
@@ -98,5 +98,44 @@ public class Claim implements Serializable{
 
 	public void setDes(String des) {
 		this.des = des;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+	
+	public int calculatedate(){
+		@SuppressWarnings("deprecation")
+		int i = getStartdate().getDate() + getStartdate().getMonth()*100 +getStartdate().getYear()*10000;
+		return i;
+	}
+	
+	public int size(){
+		return itemList.size();
+		
+	}
+	
+	public String summary(){
+		int a = 0;
+		int b = 0;
+		int c = 0;
+		int d = 0;
+		for (int i = 0 ; i < size() ; i++){
+			if (getPosition(i).getUnit() == "CAD"){
+				a += getPosition(i).getAmount();
+			}else if(getPosition(i).getUnit() == "USD"){
+				b += getPosition(i).getAmount();
+			}else if(getPosition(i).getUnit() == "EUR"){
+				c += getPosition(i).getAmount();
+			}else if(getPosition(i).getUnit() == "GBP"){
+				d += getPosition(i).getAmount();
+			}
+		}
+		return "TotalSpend:  \n"+a+" CAD\n"+b+" USD\n"+c+" EUR\n"+d+" GBP\n";
+		
 	}
 }

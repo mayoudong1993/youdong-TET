@@ -10,8 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:ems="10"
-        android:inputType="text"
-        android:text="claimname" >
+        android:inputType="text" >
 
         <requestFocus />
     </EditText>
@@ -22,5 +21,55 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:text="save" />
+
+    <EditText
+        android:id="@+id/editDes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/showStart"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <Spinner
+        android:id="@+id/stateSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editDes" />
+
+    <Button
+        android:id="@+id/setEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/showEnd"
+        android:layout_below="@+id/showEnd"
+        android:text="Set End Date" />
+
+    <TextView
+        android:id="@+id/showEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/setStartDate"
+        android:layout_marginRight="28dp"
+        android:layout_toLeftOf="@+id/finilAddClaim"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/showStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/finilAddClaim"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/setStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/showStart"
+        android:text="Set start date" />
 
 </RelativeLayout>

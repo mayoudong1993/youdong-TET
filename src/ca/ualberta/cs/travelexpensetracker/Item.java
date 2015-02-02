@@ -1,7 +1,7 @@
 package ca.ualberta.cs.travelexpensetracker;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 public class Item implements Serializable{
 	/**
@@ -11,7 +11,7 @@ public class Item implements Serializable{
 	protected String itemName;
 	protected Date startdate;
 	protected String category;
-	protected Double amount;
+	protected int amount;
 	protected String unit;
 	
 	public Item(String iName){
@@ -20,7 +20,6 @@ public class Item implements Serializable{
 	
 	public void setiName(String iName) {
 		this.itemName = iName;
-		
 	}
 
 	public String getiName(){
@@ -43,8 +42,8 @@ public class Item implements Serializable{
 		return startdate;
 	}
 
-	public void setStartdate(Date startdate) {
-		this.startdate = startdate;
+	public void setStartdate(Date date) {
+		this.startdate = date;
 	}
 
 	public String getCategory() {
@@ -55,12 +54,29 @@ public class Item implements Serializable{
 		this.category = category;
 	}
 
-	public Double getAmount() {
-		return amount;
+	public String getBAmount() {
+		String myset = "";
+		try {
+			myset = Integer.toString(amount);
+			} catch(NumberFormatException nfe) {
+			// Handle parse error.
+			}
+		return myset;
 	}
 
-	public void setAmount(Double amount) {
-		this.amount = amount;
+	public int getAmount() {
+		return this.amount;
+	}
+	
+	public void setAmount(String amount) {
+		int myset = 0;
+		try {
+			myset = Integer.parseInt(amount);
+
+			} catch(NumberFormatException nfe) {
+			// Handle parse error.
+		}
+		this.amount = myset;
 	}
 
 	public String getUnit() {

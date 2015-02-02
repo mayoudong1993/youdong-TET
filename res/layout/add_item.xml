@@ -1,41 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <Button
-        android:id="@+id/finishAddAnItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:onClick="saveItem"
-        android:text="save" />
-
-    <EditText
-        android:id="@+id/editUnit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/editCategory"
-        android:layout_toRightOf="@+id/editExpense"
-        android:ems="10"
-        android:text="unit" >
-
-        <requestFocus />
-    </EditText>
-
-    <EditText
-        android:id="@+id/editDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/finishAddAnItem"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/editCategory"
-        android:layout_below="@+id/editCategory"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:text="description" />
+    android:layout_height="match_parent"
+    android:scrollbars="vertical" >
 
     <EditText
         android:id="@+id/editCategory"
@@ -52,24 +19,12 @@
         android:id="@+id/editExpense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editDate"
+        android:layout_below="@+id/editItemName"
         android:layout_marginTop="18dp"
+        android:layout_toRightOf="@+id/textView1"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:text="money" />
-
-    <EditText
-        android:id="@+id/editDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/editItemName"
-        android:layout_marginTop="21dp"
-        android:ems="10"
-        android:inputType="date"
-        android:text="date" />
+        android:text="0" />
 
     <EditText
         android:id="@+id/editItemName"
@@ -82,12 +37,51 @@
         android:inputType="text"
         android:text="Item" />
 
-    <DatePicker
-        android:id="@+id/date"
+    <Button
+        android:id="@+id/setTheDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editDate"
-        android:layout_alignBottom="@+id/editDate"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editCategory"
+        android:text="SetDate" />
+
+    <TextView
+        android:id="@+id/editDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/setTheDate"
+        android:layout_alignBottom="@+id/setTheDate"
+        android:layout_toRightOf="@+id/setTheDate"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/finishAddAnItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editItemName"
+        android:layout_alignBottom="@+id/editItemName"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:onClick="saveItem"
+        android:text="save" />
+
+    <Spinner
+        android:id="@+id/setunit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editCategory"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/editExpense"
+        android:layout_toRightOf="@+id/editExpense"
+        android:spinnerMode="dialog" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editExpense"
+        android:layout_alignParentLeft="true"
+        android:text="Cost:"
+        android:textSize="20sp" />
 
 </RelativeLayout>

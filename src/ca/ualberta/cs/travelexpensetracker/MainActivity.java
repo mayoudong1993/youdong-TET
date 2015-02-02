@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -21,14 +21,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		ClaimListManager.initManager(this.getApplicationContext());
-		
+
 		ListView listView = (ListView) findViewById(R.id.listOfClaim);
 		Collection<Claim> claims = ClaimListController.getClaimList()
 				.getClaimList();
@@ -50,32 +49,15 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view,
-					int position, long id) {
-				int itemPosition     = position;
-				Toast.makeText(MainActivity.this, "open a Claim"+itemPosition,
-						Toast.LENGTH_SHORT).show();
-				
-				Intent intent = new Intent(MainActivity.this,
-						OpenClaimActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra("id", itemPosition);
-				startActivity(intent);
-			}
-
-		});
-
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> adapterView,
 					View view, int position, long id) {
 				AlertDialog.Builder adb = new AlertDialog.Builder(
 						MainActivity.this);
-				adb.setMessage("Edit/Delete " + list.get(position).toString()
-						+ "?");
+				Claim claim = ClaimListController.getClaimList().getPosition(
+						position);
+				adb.setMessage(claim.summary() + "\nEdit/Delete "
+						+ list.get(position).toString() + "?");
 				adb.setCancelable(true);
 				final int finalPosition = position;
 
@@ -101,6 +83,7 @@ public class MainActivity extends Activity {
 								Claim claim = list.get(finalPosition);
 								ClaimListController.getClaimList().removeClaim(
 										claim);
+								ClaimListController.saveClaimList();
 							}
 						});
 						adb.setPositiveButton("Cancel", new OnClickListener() {
@@ -117,20 +100,34 @@ public class MainActivity extends Activity {
 					}
 				});
 				adb.show();
-				return false;
+				return true;
 			}
 		});
-	}
 
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				int itemPosition = position;
+				Toast.makeText(MainActivity.this,
+						"open a Claim" + itemPosition, Toast.LENGTH_SHORT)
+						.show();
+
+				Intent intent = new Intent(MainActivity.this,
+						OpenClaimActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra("id", itemPosition);
+				startActivity(intent);
+			}
+
+		});
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
-	}
-
-	public void editClaims(MenuItem manu) {
-		Toast.makeText(this, "editClaims", Toast.LENGTH_SHORT).show();
 	}
 
 	public void addNewClaim(View v) {
