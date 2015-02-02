@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		// load date
 		ClaimListManager.initManager(this.getApplicationContext());
 
 		ListView listView = (ListView) findViewById(R.id.listOfClaim);
@@ -34,8 +34,8 @@ public class MainActivity extends Activity {
 		final ArrayList<Claim> list = new ArrayList<Claim>(claims);
 		final ArrayAdapter<Claim> claimAdapter = new ArrayAdapter<Claim>(this,
 				android.R.layout.simple_list_item_1, list);
+		// set listView
 		listView.setAdapter(claimAdapter);
-
 		ClaimListController.getClaimList().addListener(new Listener() {
 
 			@Override
@@ -48,16 +48,18 @@ public class MainActivity extends Activity {
 				claimAdapter.notifyDataSetChanged();
 			}
 		});
-
+		// set long click on list view
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> adapterView,
 					View view, int position, long id) {
 				AlertDialog.Builder adb = new AlertDialog.Builder(
 						MainActivity.this);
-				Claim claim = ClaimListController.getClaimList().getPosition(
+				final Claim claim = ClaimListController.getClaimList().getPosition(
 						position);
-				adb.setMessage(claim.summary() + "\nEdit/Delete "
-						+ list.get(position).toString() + "?");
+				adb.setMessage(claim.summary() + "\n" + claim.size()
+						+ "\nEdit/Delete ?"
+						+ ClaimListController.getClaimList()
+								.getPosition(position).toString());
 				adb.setCancelable(true);
 				final int finalPosition = position;
 
@@ -65,6 +67,9 @@ public class MainActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						Intent intent = new Intent(MainActivity.this,
 								Add_ClaimActivity.class);
+						Toast.makeText(MainActivity.this,
+								claim.getState(),
+								Toast.LENGTH_SHORT).show();
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						intent.putExtra("id", finalPosition);
@@ -103,7 +108,7 @@ public class MainActivity extends Activity {
 				return true;
 			}
 		});
-
+		// set click on list view
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view,
@@ -123,13 +128,16 @@ public class MainActivity extends Activity {
 
 		});
 	}
+
 	@Override
+	// add menu
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
+	// jump to add claim activity
 	public void addNewClaim(View v) {
 		Toast.makeText(this, "addNewClaim", Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(MainActivity.this, Add_ClaimActivity.class);

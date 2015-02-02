@@ -28,7 +28,7 @@ public class ClaimListController {
 		}
 		return claimlist;
 	}
-
+	//sort claim list by date
 	static public void sort() {
 		for (int i = 0; i < (claimlist.size() - 1); i++) {
 			for (int j = i; j < (claimlist.size() - 1 - i); j++) {
@@ -46,7 +46,7 @@ public class ClaimListController {
 			}
 		}
 	}
-
+	//Save Claim list
 	static public void saveClaimList() {
 		try {
 			ClaimListManager.getManager().saveClaimList(getClaimList());

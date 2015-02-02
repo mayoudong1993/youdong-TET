@@ -25,8 +25,8 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 	private TextView ecn;
 	private Button fca;
 	private TextView des;
-	private int year = 2015;
-	private int month = 0;
+	private int year = 2014;
+	private int month = 11;
 	private int day = 1;
 	private TextView startDateView;
 	private TextView endDateView;
@@ -34,7 +34,7 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 	private Button ed;
 	private Date start = new Date();
 	private Date end = new Date();
-	private int State = 0;
+	private String State;
 	private Spinner istate;
 
 	@SuppressWarnings("deprecation")
@@ -59,13 +59,13 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 		istate.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				Toast.makeText(Add_ClaimActivity.this,
-						parent.getItemAtPosition(position).toString(),
-						Toast.LENGTH_SHORT).show();
 				if (parent.getItemAtPosition(position).toString() == "approved"){
-					State = 1; 
-				}else{
-					State = 0;
+					State = "approved";
+				}else if (parent.getItemAtPosition(position).toString() == "returned"){
+					State = "returned";
+					Toast.makeText(Add_ClaimActivity.this,
+							State,
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 
@@ -73,7 +73,7 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
-
+		//read data from Claim
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			int temp = extras.getInt("id");
@@ -82,9 +82,8 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 			String name = openedclaim.getName();
 			String claimdes = openedclaim.getDes();
 			State = openedclaim.getState();
-			String astr = adapter.getItem(State);
-			adapter.remove(astr);
-			adapter.insert(astr, 0);
+			adapter.remove(State);
+			adapter.insert(State, 0);
 			istate.setAdapter(adapter);
 			start = openedclaim.getStartdate();
 			day = start.getDate();
@@ -98,6 +97,7 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 			showEndDate(year, month + 1, day);
 			ecn.setText(name);
 			des.setText(claimdes);
+		//set button as update
 			fca.setOnClickListener(new UpdateClaim(openedclaim));
 
 		}
@@ -119,6 +119,8 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 	};
 
 	@SuppressWarnings("deprecation")
+	//showDate in then text view
+	
 	public void showDate(int year, int month, int day) {
 		start.setDate(day);
 		start.setMonth(month - 1);
@@ -142,7 +144,7 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 		getMenuInflater().inflate(R.menu.add__claim, menu);
 		return true;
 	}
-
+	// add claim in the claim list
 	private class AddClaim implements OnClickListener {
 		public void onClick(View v) {
 			ClaimListController clc = new ClaimListController();
@@ -150,18 +152,21 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 			newclaim.setDes(des.getText().toString());
 			newclaim.setStartdate(start);
 			newclaim.setEnddate(end);
+			newclaim.setState(State);
 			clc.addClaim(newclaim);
 			ClaimListController.sort();
 			ClaimListController.saveClaimList();
+			//return to main
 			Intent intent = new Intent(Add_ClaimActivity.this,
 					MainActivity.class);
 			startActivity(intent);
 		}
 	}
-
+	
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.setStartDate:
+			//build date picker dialog
 			DatePickerDialog datePicker = new DatePickerDialog(
 					Add_ClaimActivity.this, new OnDateSetListener() {
 						@Override
@@ -196,10 +201,14 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 		}
 
 		public void onClick(View v) {
-			if (State == 1) {
+			if (State == "approved") {
 				Toast.makeText(Add_ClaimActivity.this, "Can't change",
 						Toast.LENGTH_SHORT).show();
 				this.getClaim().setState(State);
+				ClaimListController.saveClaimList();
+				Intent intent = new Intent(Add_ClaimActivity.this,
+						MainActivity.class);
+				startActivity(intent);
 			} else {
 				this.getClaim().setState(State);
 				this.getClaim().setName(ecn.getText().toString());
@@ -208,6 +217,7 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 				this.getClaim().setEnddate(end);
 				ClaimListController.sort();
 				ClaimListController.saveClaimList();
+				//return to main
 				Intent intent = new Intent(Add_ClaimActivity.this,
 						MainActivity.class);
 				startActivity(intent);
@@ -222,7 +232,7 @@ public class Add_ClaimActivity extends Activity implements OnClickListener {
 			this.claim = claim;
 		}
 	}
-
+	//build a list for spinner
 	private List<String> getData() {
 		List<String> dataList = new ArrayList<String>();
 		dataList.add("returned");

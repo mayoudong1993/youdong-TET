@@ -28,17 +28,19 @@ public class AddItemActivity extends Activity implements OnClickListener {
 	private TextView category;
 	private TextView money;
 	private Button pickdate;
-	private int year;
-	private int month;
-	private int day;
+	private int year = 2014;
+	private int month = 11;
+	private int day = 1;
 	private String iunit;
+	private Claim claim;
+
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_item);
 		Bundle extras = getIntent().getExtras();
-		
+
 		pickdate = (Button) findViewById(R.id.setTheDate);
 		pickdate.setOnClickListener(this);
 		money = (TextView) findViewById(R.id.editExpense);
@@ -47,7 +49,7 @@ public class AddItemActivity extends Activity implements OnClickListener {
 		category = (TextView) findViewById(R.id.editCategory);
 		unit = (Spinner) findViewById(R.id.setunit);
 		fia = (Button) findViewById(R.id.finishAddAnItem);
-
+		// get date for spinner
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				AddItemActivity.this, android.R.layout.simple_spinner_item,
 				getData());
@@ -55,28 +57,27 @@ public class AddItemActivity extends Activity implements OnClickListener {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				iunit = adapter.getItem(position);
-				Toast.makeText(AddItemActivity.this,
-						"sdf"+position,
+				Toast.makeText(AddItemActivity.this, "sdf" + position,
 						Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				
+
 			}
 		});
 		ClaimListManager.initManager(this.getApplicationContext());
 		final int temp = extras.getInt("id");
 		if (extras.size() == 2) {
 			final int pos = extras.getInt("pos");
-			Item openeditem = ClaimListController.getClaimList()
-					.getPosition(temp).getPosition(pos);
+			claim = ClaimListController.getClaimList().getPosition(temp);
+			Item openeditem = claim.getPosition(pos);
 			String iname = openeditem.getiName();
 			String icategory = openeditem.getCategory();
 			String imoney = openeditem.getBAmount();
 			Date startdate = openeditem.getStartdate();
 			iunit = openeditem.getUnit();
-			
+
 			adapter.remove(iunit);
 			adapter.insert(iunit, 0);
 			year = startdate.getYear();
@@ -93,7 +94,7 @@ public class AddItemActivity extends Activity implements OnClickListener {
 		if (extras.size() == 1) {
 			unit.setAdapter(adapter);
 			fia.setOnClickListener(new UaddItem());
-			showDate(2015, 1, 1);
+			showDate(2014, 12, 1);
 		}
 
 	}
@@ -105,36 +106,42 @@ public class AddItemActivity extends Activity implements OnClickListener {
 		}
 	};
 
+	// update an item
 	public class UpdateItem implements OnClickListener {
 		@SuppressWarnings("deprecation")
 		public void onClick(View v) {
-			Bundle extras = getIntent().getExtras();
-			int temp = extras.getInt("id");
-			int pos = extras.getInt("pos");
-			Item item1 = ClaimListController.getClaimList().getPosition(temp)
-					.getPosition(pos);
-			item1.getStartdate();
-			item1.setiName(itemname.getText().toString());
-			item1.setCategory(category.getText().toString());
-			item1.setUnit(iunit);
-			item1.setAmount(money.getText().toString());
-			Date start = new Date();
-			start.setDate(day);
-			start.setYear(year);
-			start.setMonth(month);
-			item1.setStartdate(start);
-			Intent intent = new Intent(AddItemActivity.this,
-					OpenClaimActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.putExtra("id", temp);
-			ClaimListController.saveClaimList();
-			startActivity(intent);
-
+			if (claim.getState() == "approved") {
+				Toast.makeText(AddItemActivity.this, "Can't edit",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Bundle extras = getIntent().getExtras();
+				int temp = extras.getInt("id");
+				int pos = extras.getInt("pos");
+				Item item1 = ClaimListController.getClaimList()
+						.getPosition(temp).getPosition(pos);
+				item1.getStartdate();
+				item1.setiName(itemname.getText().toString());
+				item1.setCategory(category.getText().toString());
+				item1.setUnit(iunit);
+				item1.setAmount(money.getText().toString());
+				Date start = new Date();
+				start.setDate(day);
+				start.setYear(year);
+				start.setMonth(month);
+				item1.setStartdate(start);
+				Intent intent = new Intent(AddItemActivity.this,
+						OpenClaimActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra("id", temp);
+				ClaimListController.saveClaimList();
+				startActivity(intent);
+			}
 		}
 
 	}
 
+	// add an item
 	public class UaddItem implements OnClickListener {
 		@SuppressWarnings("deprecation")
 		public void onClick(View v) {
@@ -164,6 +171,7 @@ public class AddItemActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.setTheDate:
+			// show date picker dialog
 			DatePickerDialog datePicker = new DatePickerDialog(
 					AddItemActivity.this, new OnDateSetListener() {
 						@Override
@@ -177,6 +185,7 @@ public class AddItemActivity extends Activity implements OnClickListener {
 		}
 	}
 
+	// show date in textview
 	public void showDate(int year, int month, int day) {
 		this.year = year;
 		this.month = month - 1;
@@ -185,7 +194,7 @@ public class AddItemActivity extends Activity implements OnClickListener {
 				.append("/").append(month).append("/").append(year));
 	}
 
-	
+	// set up data for spinner
 	private List<String> getData() {
 		List<String> dataList = new ArrayList<String>();
 		dataList.add("CAD");

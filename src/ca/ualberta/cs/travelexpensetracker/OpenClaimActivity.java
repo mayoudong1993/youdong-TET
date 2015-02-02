@@ -41,7 +41,9 @@ public class OpenClaimActivity extends Activity {
 		final ArrayList<Item> items = new ArrayList<Item>(Items);
 		final ArrayAdapter<Item> itemAdapter = new ArrayAdapter<Item>(this,
 				android.R.layout.simple_list_item_1, items);
+		// listview shows itemlist
 		listView.setAdapter(itemAdapter);
+
 		cl = ClaimListController.getClaimList().getPosition(temp);
 		ClaimListController.getClaimList().getPosition(temp)
 				.addListener(new Listener() {
@@ -56,6 +58,7 @@ public class OpenClaimActivity extends Activity {
 						itemAdapter.notifyDataSetChanged();
 					}
 				});
+		// set a return main_activity button.
 		btm.setOnClickListener(new Back_click());
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -158,11 +161,13 @@ public class OpenClaimActivity extends Activity {
 		return true;
 	}
 
+	// call email function;
 	public void emailit(MenuItem manu) {
 		emailListProcessor();
 		Toast.makeText(this, "Email This Claim", Toast.LENGTH_SHORT).show();
 	}
 
+	// add text in email
 	@SuppressWarnings("deprecation")
 	private void emailListProcessor() {
 		StringBuffer mailBody = new StringBuffer();
@@ -172,12 +177,13 @@ public class OpenClaimActivity extends Activity {
 				+ cl.getStartdate().getYear() + " To "
 				+ cl.getEnddate().getDate() + "/"
 				+ (cl.getEnddate().getMonth() + 1) + "/"
-				+ cl.getEnddate().getYear() + "\n\n");
+				+ cl.getEnddate().getYear() + "\n\n" + cl.summary());
 		for (int i = 0; i < cl.size(); i++) {
-			mailBody.append("Item" + (i+1) + ":" + cl.getPosition(i).getItemName()
-					+ "\nDate: " + cl.getPosition(i).getStartdate().getDate()
-					+ "/" + (cl.getPosition(i).getStartdate().getMonth() + 1)
-					+ "/" + cl.getPosition(i).getStartdate().getYear()
+			mailBody.append("Item" + (i + 1) + ":"
+					+ cl.getPosition(i).getItemName() + "\nDate: "
+					+ cl.getPosition(i).getStartdate().getDate() + "/"
+					+ (cl.getPosition(i).getStartdate().getMonth() + 1) + "/"
+					+ cl.getPosition(i).getStartdate().getYear()
 					+ "\nExpense : " + cl.getPosition(i).getBAmount() + " "
 					+ cl.getPosition(i).getUnit() + "\nCategory :"
 					+ cl.getPosition(i).getCategory() + "\n\n");
@@ -195,15 +201,21 @@ public class OpenClaimActivity extends Activity {
 		}
 	}
 
+	// jump to add item activity
 	public void addaitem(View v) {
 		// Toast.makeText(this, "add new item", Toast.LENGTH_SHORT).show();
-		Bundle extras = getIntent().getExtras();
-		int temp = extras.getInt("id");
-		Intent intent = new Intent(OpenClaimActivity.this,
-				AddItemActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.putExtra("id", temp);
-		startActivity(intent);
+		if (cl.getState() == "approved") {
+			Toast.makeText(OpenClaimActivity.this, "Can't add",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			Bundle extras = getIntent().getExtras();
+			int temp = extras.getInt("id");
+			Intent intent = new Intent(OpenClaimActivity.this,
+					AddItemActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.putExtra("id", temp);
+			startActivity(intent);
+		}
 	}
 }

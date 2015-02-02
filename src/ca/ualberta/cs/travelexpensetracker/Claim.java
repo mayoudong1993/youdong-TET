@@ -14,7 +14,7 @@ public class Claim implements Serializable{
 	protected Date startdate;
 	protected Date enddate;
 	protected String des;
-	protected int state;
+	protected String state;
 	protected ArrayList<Item> itemList;
 	protected transient ArrayList<Listener> listenersss;
 	
@@ -59,7 +59,7 @@ public class Claim implements Serializable{
 	}
 
 	public String toString(){
-		return getName();
+		return getName()+ "     " +getState();
 	}
 	
 	public void addListener(Listener l) {
@@ -100,11 +100,11 @@ public class Claim implements Serializable{
 		this.des = des;
 	}
 
-	public int getState() {
+	public String getState() {
 		return state;
 	}
 
-	public void setState(int state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 	
@@ -124,14 +124,15 @@ public class Claim implements Serializable{
 		int b = 0;
 		int c = 0;
 		int d = 0;
-		for (int i = 0 ; i < size() ; i++){
-			if (getPosition(i).getUnit() == "CAD"){
+		int i = 0;
+		for (; i < size() ; i++){
+			if (getPosition(i).getUnit().equals( "CAD")){
 				a += getPosition(i).getAmount();
-			}else if(getPosition(i).getUnit() == "USD"){
+			}else if(getPosition(i).getUnit().equals("USD")){
 				b += getPosition(i).getAmount();
-			}else if(getPosition(i).getUnit() == "EUR"){
+			}else if(getPosition(i).getUnit().equals("EUR")){
 				c += getPosition(i).getAmount();
-			}else if(getPosition(i).getUnit() == "GBP"){
+			}else if(getPosition(i).getUnit().equals("GBP")){
 				d += getPosition(i).getAmount();
 			}
 		}
