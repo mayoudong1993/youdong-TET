@@ -7,7 +7,7 @@
 name: Youdong Ma ONE Card number: 1382734 Unix id: youdong lecture section: A1 instructor's name: Abram Hindle
 License
 
-youdong-TET: add/delete claims and can be emailed Copyright (C) 2014 Anni Dai adai1@ualberta.ca
+youdong-TET: add/delete claims and can be emailed Copyright (C) 2015 Youdong Ma youdong@ualberta.ca
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
