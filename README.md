@@ -1,5 +1,7 @@
 # youdong-TET
 
+#video: http://youtu.be/1i-dW64F8ug
+
 #This TravelExpenseTracker Application will start by click the app "youdong-TET" in the Launcher.
 
 
